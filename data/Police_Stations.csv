@@ -1,0 +1,12 @@
+﻿AddressFull,PlaceName,AddressCity,AddressState,AddressZip,PlaceType,PlaceWeb,DegreesX,DegreesY,PlaceAccess,OBJECTID,PlaceStatus,longitude,latitude
+620 W WASHINGTON ST,Phoenix Police Headquarters,PHOENIX,AZ,85003,POLICE STATION,https://www.phoenix.gov/police,-112.081994,33.448525,PUBLIC,30,OPEN,-112.0819935,33.44852452
+12220 N 39TH AVE,Cactus Park Precinct,PHOENIX,AZ,85029,POLICE STATION,https://www.phoenix.gov/police/precincts/cactus-park,-112.143411,33.597083,PUBLIC,233,OPEN,-112.1434107,33.59708274
+1902 S 16TH ST,Central City Precinct,PHOENIX,AZ,85034,POLICE STATION,https://www.phoenix.gov/police/precincts/central-city,-112.049179,33.429311,PUBLIC,269,OPEN,-112.049179,33.42931146
+2908 E SKY HARBOR BLVD,Airport Bureau,PHOENIX,AZ,85034,POLICE STATION,,-112.01942,33.437871,PUBLIC,276,OPEN,-112.0194199,33.4378707
+6180 W ENCANTO BLVD,Maryvale Station,PHOENIX,AZ,85035,POLICE STATION,https://www.phoenix.gov/police/precincts/maryvale,-112.192883,33.474351,PUBLIC,301,OPEN,-112.1928832,33.4743514
+400 W SOUTHERN AVE,South Mountain Precinct,PHOENIX,AZ,85041,POLICE STATION,https://www.phoenix.gov/police/precincts/south-mountain,-112.078867,33.392692,PUBLIC,320,OPEN,-112.0788669,33.39269224
+16030 N 56TH ST,Desert Horizon Precinct,SCOTTSDALE,AZ,85254,POLICE STATION,https://www.phoenix.gov/police/precincts/desert-horizon,-111.961727,33.632461,PUBLIC,356,OPEN,-111.9617272,33.63246071
+2075 E MARYLAND AVE,Mountain View Precinct,PHOENIX,AZ,85016,POLICE STATION,https://www.phoenix.gov/police/precincts/mountain-view,-112.037103,33.530805,PUBLIC,535,OPEN,-112.0371029,33.53080465
+33355 N CAVE CREEK RD,Black Mountain Precinct,CAVE CREEK,AZ,85331,POLICE STATION,https://www.phoenix.gov/police/precincts/black-mountain,-111.969165,33.787721,PUBLIC,536,OPEN,-111.9691646,33.78772135
+2111 S 99TH AVE,Estrella Mountain Station,TOLLESON,AZ,85353,POLICE STATION,https://www.phoenix.gov/police/precincts/maryvale,-112.271563,33.42714,PUBLIC,537,OPEN,-112.2715626,33.4271403
+101 N 1ST AVE,Downtown Operations Unit,PHOENIX,AZ,85003,POLICE STATION,,-112.074662,33.450151,PUBLIC,978,OPEN,-112.0746624,33.45015288
