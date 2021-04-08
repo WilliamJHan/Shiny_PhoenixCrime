@@ -6,13 +6,20 @@ This project is intended to provide more insights into frequencies of various cr
 
 ## Sources
 Crime stat & police station data from: [City of Phoenix Open Data](https://www.phoenixopendata.com/dataset)
+
 Phoenix zip code data from: [Phoenix areaConnect](https://phoenix.areaconnect.com/zip2.htm)
+
 Moon phase calendar data from: [Vertex42](https://www.vertex42.com/calendars/moon-phase-calendar.html)
+
 Population by Zip code data from: [Zipatlas](http://zipatlas.com/us/az/phoenix/zip-code-comparison/population-density.htm)
+
 Weather data from: [National Weather SErvice Forecase Office](https://w2.weather.gov/climate/xmacis.php?wfo=psr)
 
 ## About the Author
 William Jeongwoo Han
+
 william.jeongwoo.han@gmail.com
+
 https://www.linkedin.com/in/williamjeongwoohan/
+
 I am currently an Associate of Society of Actuaries (ASA) working in Medicaid Consulting and a NYC Data Science Academy student. I graduated from University of Southern California (USC) in '17 with a Bachelor's degree in Applied and Computational Mathematics. I am very interested in pulling actionable insights from complex datasets and love traveling.
