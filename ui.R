@@ -194,7 +194,7 @@ shinyUI(
                            h5(p("william.jeongwoo.han@gmail.com")),
                            hr(),
                            h4(p("About the Author")),
-                           h5(p("I am currently an Associate of Society of Actuaries (ASA) working in Medicaid Consulting and a NYC Data Science Academy student. I graduated from University of Southern California (USC) in '17 with a Bachelor's degree in Applied and Computation Mathematics. I am very interested in pulling actionable insights from complex dataset and love traveling.")),
+                           h5(p("I am currently an Associate of Society of Actuaries (ASA) working in Medicaid Consulting and a NYC Data Science Academy student. I graduated from University of Southern California (USC) in '17 with a Bachelor's degree in Applied and Computation Mathematics. I am very interested in pulling actionable insights from complex datasets and love traveling.")),
                            br(),
                            h4(p("About the Project")),
                            h5(p("This project is intended to provide more insight into frequencies of various crimes in Phoenix, AZ based on zip code, crime category, premise type, etc. It will help the police place the officers on duty more efficiently (although there are many more factors to reduce serious crime in the city than from the data). Prospective home buyers will also be able to use this to get some insights on crime rate in the vacinity of properties of interest.\n")),
