@@ -1,4 +1,3 @@
-
 shinyServer(function(input, output) {
 
     #To put the tabs on the right side
@@ -17,6 +16,7 @@ shinyServer(function(input, output) {
             theme_light()
     })
     
+    #Create info box for overview tab
     output$infobox1 <- renderInfoBox({
         infoBox(
             "Crime", value = prettyNum(65109,big.mark = ","), icon = icon("balance-scale"), color = "red", fill = TRUE
@@ -61,6 +61,7 @@ shinyServer(function(input, output) {
                             shapes = c("circle","circle"), borders = c("blue","red"))
     })
     
+    #Create scatter plot of population density vs. number of crimes
     output$zipPlot3 <- renderPlot({
         crimestat_population %>% 
             filter(.,year %in% input$yearChoice_zip, month_full %in% input$monthChoice_zip) %>% 
@@ -134,6 +135,7 @@ shinyServer(function(input, output) {
             theme_light()
     })
     
+    #Create bar graph by day of week for different premise types
     output$premisePlot1 <- renderPlot({
         crimestat %>%
             filter(.,year %in% input$yearChoice_prem, month_full %in% input$monthChoice_prem) %>%
@@ -154,6 +156,7 @@ shinyServer(function(input, output) {
                   axis.ticks.y = element_blank())
     })
     
+    #Create sankey graph
     output$premisePlot2 <- renderSankeyNetwork({
         sankeyNetwork(Links = crimestat_links,
                       Nodes = crimestat_nodes,
@@ -165,6 +168,7 @@ shinyServer(function(input, output) {
                       height = 300)
     })
     
+    #Create line chart with different premise
     output$premisePlot3 <- renderPlot({
         crimestat %>%
             filter(.,year %in% input$yearChoice_prem, month_full %in% input$monthChoice_prem, time != "00:00") %>%
@@ -180,6 +184,7 @@ shinyServer(function(input, output) {
             theme_light()
     })
     
+    #Duration box plot by day
     output$durationPlot1 <- renderPlot({
         duration %>% 
             select(., year, month_full, day, timediff_hrs) %>% 
@@ -192,6 +197,7 @@ shinyServer(function(input, output) {
             ggtitle("Crime Duration by Day")
     })
     
+    #Duration box plot by crime category
     output$durationPlot2 <- renderPlot({
         duration %>% 
             select(., year, month_full, crime.cat, timediff_hrs) %>% 
@@ -205,6 +211,7 @@ shinyServer(function(input, output) {
             ggtitle("Crime Duration by Crime Category")
     })
     
+    #Duration box plot by premise
     output$durationPlot3 <- renderPlot({
         duration %>% 
             select(., year, month_full, premise, timediff_hrs) %>% 
@@ -217,6 +224,7 @@ shinyServer(function(input, output) {
             ggtitle("Crime Duration by Crime Category")
     })
     
+    #Moon phase bar chart
     output$factorPlot1 <- renderPlot({
         moonphase %>% 
             filter(.,year %in% c(2017, 2018, 2019, 2020)) %>% 
@@ -236,6 +244,7 @@ shinyServer(function(input, output) {
                   axis.ticks.y = element_blank())
     })
     
+    #Temperature vs. crime freq scatterplot
     output$factorPlot2 <- renderPlot({
         crimestat_weather %>% 
             ggplot() +
@@ -248,6 +257,7 @@ shinyServer(function(input, output) {
             theme(legend.position = "none")
     })
     
+    #unemployment vs. number of crimes line chart comparison
     output$factorPlot3 <- renderPlot({
         crimestat %>% 
             group_by(.,Month_Yr) %>% 
@@ -266,6 +276,8 @@ shinyServer(function(input, output) {
             ggtitle("Number of Crimes vs. Unemployment Rate") +
             theme_light()
     })
+    
+    #Data tables
     
     output$crimestat_orig <- DT::renderDataTable({
         datatable(crimestat_orig, rownames = F)

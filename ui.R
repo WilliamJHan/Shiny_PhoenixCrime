@@ -1,4 +1,3 @@
-
 shinyUI(
     fluidPage(
         navbarPage(
@@ -19,7 +18,6 @@ shinyUI(
                     column(width = 3, valueBox(prettyNum(65109,big.mark = ","), "Avg. Number of Crimes per Year", icon = icon("balance-scale"))),
                     column(width = 3, valueBox(prettyNum(1733630,big.mark = ","), "Population of Phoenix (2021)", icon = icon("users"))),
                     column(width = 3, valueBox(prettyNum(3000,big.mark = ","), "Number of Officers", icon = icon("user")))
-                    #column(width = 3, plotOutput("overviewPlot2", height = 400))
                     )
                 ),
             navbarMenu(title = "By Factor",
@@ -27,8 +25,9 @@ shinyUI(
                        tabPanel(title = "Zip Code", fluid = TRUE,
                                 sidebarLayout(
                                     sidebarPanel(
+                                        h2("View by Zip Code"),
                                         titlePanel("Desired Year and Month"),
-                                        helpText("2015 & 2021 not shown as it's incomplete."),
+                                        helpText("2015 & 2021 not shown as data is incomplete in those years."),
                                         fluidRow(column(3,
                                                         radioButtons(
                                                             "yearChoice_zip",
@@ -63,8 +62,9 @@ shinyUI(
                        tabPanel(title = "Crime Category", fluid = TRUE,
                                 sidebarLayout(
                                     sidebarPanel(
+                                        h2("View by Crime Category"),
                                         titlePanel("Desired Year and Month"),
-                                        helpText("2015 & 2021 not shown as it's incomplete."),
+                                        helpText("2015 & 2021 not shown as data is incomplete in those years."),
                                         fluidRow(column(3,
                                                         radioButtons(
                                                             "yearChoice_cat",
@@ -98,8 +98,9 @@ shinyUI(
                        tabPanel(title = "Premise Type", fluid = TRUE,
                                 sidebarLayout(
                                     sidebarPanel(
+                                        h2("View by Premise Type"),
                                         titlePanel("Desired Year and Month"),
-                                        helpText("2015 & 2021 not shown as it's incomplete."),
+                                        helpText("2015 & 2021 not shown as data is incomplete in those years."),
                                         fluidRow(column(3,
                                                         radioButtons(
                                                             "yearChoice_prem",
@@ -133,8 +134,9 @@ shinyUI(
                        tabPanel(title = "Crime Duration", fluid = TRUE,
                                 sidebarLayout(
                                     sidebarPanel(
+                                        h2("View by Crime Duration"),
                                         titlePanel("Desired Year and Month"),
-                                        helpText("2015 & 2021 not shown as it's incomplete."),
+                                        helpText("2015 & 2021 not shown as data is incomplete in those years."),
                                         fluidRow(column(3,
                                                         radioButtons(
                                                             "yearChoice_duration",

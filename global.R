@@ -6,7 +6,6 @@ library(scales)
 library(shiny)
 library(leaflet)
 library(wordcloud)
-library(shiny)
 library(shinydashboard)
 library(ggplot2)
 library(hrbrthemes)
@@ -31,11 +30,6 @@ moonphase_orig = read.csv("data/moon-phase.csv")
 population_orig = read.csv("data/population_by_zip.csv")
 weather_orig = read.csv("data/phoenix_weather.csv")
 duration_orig = read.csv("data/duration_main.csv")
-
-#Create a separate dataset for wordcloud.
-crimestat_word <- crimestat %>% 
-  group_by(.,premise.type) %>% 
-  summarise(.,freq = n())
 
 #Prepping for Zip Code leaflet map
 addLegendCustom <- function(map, colors, labels, sizes, shapes, borders, opacity = 0.5){
