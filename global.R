@@ -14,6 +14,7 @@ library(networkD3)
 library(DT)
 library(shinythemes)
 library(wordcloud)
+library(shinyWidgets)
 
 crimestat = read.csv("data/crimestat_main.csv")
 zipcode = read.csv("data/zipcode_main.csv")
@@ -88,9 +89,13 @@ duration$day <- factor(duration$day, levels = c("Monday","Tuesday","Wednesday","
 weather = weather %>% 
   gather(key = month, value = temperature, January:December, na.rm = TRUE)
 
+#Filtering out 2021 March since it's not complete.
 crimestat_weather = crimestat %>% 
+  filter(., Month_Yr != "2021-03") %>% 
   group_by(.,year, month_full) %>% 
   summarise(., freq = n())
 
 crimestat_weather = left_join(crimestat_weather, weather, by = c("year" = "Year", "month_full" = "month"))
 crimestat_weather$temperature = as.numeric(crimestat_weather$temperature)
+
+

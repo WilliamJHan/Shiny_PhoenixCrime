@@ -13,6 +13,37 @@ shinyUI(
                 h2("Crime Frequency in Phoenix\n"),
                 h4("Total number of crimes by year & month limited to city of Phoenix, not the entire valley."),
                 hr(), br(),
+                fluidRow(column(3,
+                                pickerInput(
+                                  "zipChoice_overview",
+                                  label = "Zip Code(s):",
+                                  choices = unique(crimestat$zip),
+                                  selected = unique(crimestat$zip),
+                                  options = list('actions-box' = TRUE),
+                                  multiple = T
+                                  )
+                                ),
+                          column(3,
+                                 pickerInput(
+                                   "CatChoice_overview",
+                                   label = "Crime Category(-ies):",
+                                   choices = unique(crimestat$crime.cat),
+                                   selected = unique(crimestat$crime.cat),
+                                   options = list('actions-box' = TRUE),
+                                   multiple = T
+                                   )
+                                 ),
+                           column(3,
+                                  pickerInput(
+                                    "PremChoice_overview",
+                                    label = "Premise Type(s):",
+                                    choices = unique(crimestat$premise),
+                                    selected = unique(crimestat$premise),
+                                    options = list('actions-box' = TRUE),
+                                    multiple = T
+                                    )
+                                  )
+                        ),
                 fluidRow(
                     column(width = 9, plotOutput("overviewPlot1", height = 450)),
                     column(width = 3, valueBox(prettyNum(65109,big.mark = ","), "Avg. Number of Crimes per Year", icon = icon("balance-scale"))),
@@ -26,7 +57,7 @@ shinyUI(
                                 sidebarLayout(
                                     sidebarPanel(
                                         h2("View by Zip Code"),
-                                        titlePanel("Desired Year and Month"),
+                                        h3("Desired Year and Month:"),
                                         helpText("2015 & 2021 not shown as data is incomplete in those years."),
                                         fluidRow(column(3,
                                                         radioButtons(
@@ -53,7 +84,7 @@ shinyUI(
                                             column(6, leafletOutput("zipPlot2"))                                            
                                             ),
                                         fluidRow(
-                                            column(12, plotOutput("zipPlot3"))
+                                            column(12, plotlyOutput("zipPlot3"))
                                             )
 
                                         )
@@ -63,7 +94,7 @@ shinyUI(
                                 sidebarLayout(
                                     sidebarPanel(
                                         h2("View by Crime Category"),
-                                        titlePanel("Desired Year and Month"),
+                                        h3("Desired Year, Month, and Zip:"),
                                         helpText("2015 & 2021 not shown as data is incomplete in those years."),
                                         fluidRow(column(3,
                                                         radioButtons(
@@ -82,7 +113,18 @@ shinyUI(
                                                             selected = c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
                                                             )
                                                         )
+                                                 ),
+                                        fluidRow(
+                                          column(12,
+                                                 pickerInput("zipChoice_cat",
+                                                             label = "Zip Code(s):",
+                                                             choices = unique(crimestat_population$zip),
+                                                             selected = unique(crimestat_population$zip),
+                                                             options = list('actions-box' = TRUE),
+                                                             multiple = T
+                                                             )
                                                  )
+                                          )
                                         ),
                                     mainPanel(
                                         fluidRow(
@@ -99,7 +141,7 @@ shinyUI(
                                 sidebarLayout(
                                     sidebarPanel(
                                         h2("View by Premise Type"),
-                                        titlePanel("Desired Year and Month"),
+                                        h3("Desired Year, Month, and Zip:"),
                                         helpText("2015 & 2021 not shown as data is incomplete in those years."),
                                         fluidRow(column(3,
                                                         radioButtons(
@@ -118,12 +160,24 @@ shinyUI(
                                                             selected = c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
                                                             )
                                                         )
-                                                 )
+                                                 ),
+                                        fluidRow(column(12,
+                                                        pickerInput(
+                                                             "zipChoice_prem",
+                                                             label = "Zip Code(s):",
+                                                             choices = unique(crimestat_population$zip),
+                                                             selected = unique(crimestat_population$zip),
+                                                             options = list('actions-box' = TRUE),
+                                                             multiple = T
+                                                             )
+                                                        )
+                                                 ),
+                                        fluidRow(column(12, h5("*Note that SankeyNetwork graph will not update with the toggles above.")))
                                         ),
                                     mainPanel(
                                         fluidRow(
-                                            column(6, plotOutput("premisePlot1")),
-                                            column(6, sankeyNetworkOutput("premisePlot2", height = 420))
+                                            column(6, sankeyNetworkOutput("premisePlot1", height = 420)),
+                                            column(6, plotOutput("premisePlot2"))
                                             ),
                                         fluidRow(
                                             column(12, plotOutput("premisePlot3"))
@@ -135,7 +189,7 @@ shinyUI(
                                 sidebarLayout(
                                     sidebarPanel(
                                         h2("View by Crime Duration"),
-                                        titlePanel("Desired Year and Month"),
+                                        h3("Desired Year, Month, Category, and Premise:"),
                                         helpText("2015 & 2021 not shown as data is incomplete in those years."),
                                         fluidRow(column(3,
                                                         radioButtons(
@@ -154,15 +208,32 @@ shinyUI(
                                                             selected = c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
                                                             )
                                                         )
+                                                 ),
+                                        fluidRow(
+                                          column(12,
+                                                 selectInput("timediff_cat",
+                                                             label = "Select a crime category:",
+                                                             choices = unique(duration$crime.cat),
+                                                             selected = "LARCENY-THEFT"
+                                                             )
                                                  )
+                                          ),
+                                        fluidRow(
+                                          column(12,
+                                                 selectInput("timediff_prem",
+                                                             label = "Select a premise:",
+                                                             choices = unique(duration$premise),
+                                                             selected = "House"
+                                                             )
+                                                 )
+                                          )
                                         ),
                                     mainPanel(
                                         fluidRow(
-                                            column(6, plotOutput("durationPlot1")),
-                                            column(6, plotOutput("durationPlot2"))
+                                            column(12, plotOutput("durationPlot1"))
                                             ),
                                         fluidRow(
-                                            column(12, plotOutput("durationPlot3"))
+                                            column(12, plotOutput("durationPlot2"))
                                             )
                                         )
                                     )
@@ -171,8 +242,14 @@ shinyUI(
             tabPanel(
                 title = "Interesting Facts",
                 icon = icon("clipboard"),
-                fluidRow(column(width = 4, plotOutput("factorPlot1")),
-                         column(width = 7, plotOutput("factorPlot2"))),
+                fluidRow(column(width = 3, 
+                                h2(p("Interesting Facts")),
+                                h4(p("A couple of other interesting factors (moon phase, average temperature, and unemployment rate) were tested to see if there were any relationships to the crime frequency.")),
+                                h4(p("Moon phase data just takes the exact dates of the moon phases, not the dates that surround them. Not much correlation was observed.")),
+                                h4(p("Average temperature by number of crimes shows how the number of crimes trends downward as temperature increases.")),
+                                h4(p("Unemployment rate by number of crimes was interesting as unemployment rate decreased, the crime rate increased, which is counter intuitive."))),
+                         column(width = 4, plotOutput("factorPlot1")),
+                         column(width = 5, plotOutput("factorPlot2"))),
                 fluidRow(column(width = 12, plotOutput("factorPlot3")))
             ),
             navbarMenu(title = "Data",
@@ -198,7 +275,7 @@ shinyUI(
                            br(),
                            h4(p("About the Project")),
                            h5(p("This project is intended to provide more insight into frequencies of various crimes in Phoenix, AZ based on zip code, crime category, premise type, etc. It will help the police place the officers on duty more efficiently (although there are many more factors to reduce serious crime in the city than from the data). Prospective home buyers will also be able to use this to get some insights on crime rate in the vacinity of properties of interest.\n")),
-                           h5(p("I hope you find the project interesting and/or useful. Any comments or questions are welcome at william.jeongwoo.han@gmail.com\n")),
+                           h5(p("I hope you find the project interesting and/or useful. If you have any comments or questions, please reach out to me via william.jeongwoo.han@gmail.com or", a("LinkedIn", href = "https://www.linkedin.com/in/williamjeongwoohan/"), ".\n")),
                            h5(p("The source code for this Shiny app is available on ", a("github", href = "https://github.com/WilliamJHan/Shiny_PhoenixCrime"),".")),
                            br(),
                            h4(p("Sources\n")),

@@ -6,6 +6,7 @@ shinyServer(function(input, output) {
     #Create overview graph
     output$overviewPlot1 <- renderPlot({
         crimestat %>% 
+            filter(.,zip %in% input$zipChoice_overview, crime.cat %in% input$CatChoice_overview, premise %in% input$PremChoice_overview) %>% 
             group_by(.,Month_Yr) %>%
             summarise(., freq = n()) %>% 
             ggplot() +
@@ -42,7 +43,8 @@ shinyServer(function(input, output) {
                   panel.border = element_blank(),
                   panel.background = element_blank(),
                   axis.ticks.x = element_blank(),
-                  axis.ticks.y = element_blank())
+                  axis.ticks.y = element_blank(),
+                  plot.title = element_text(size=18))
     })
     
     #Create leaflet map for zip code mapping
@@ -61,26 +63,28 @@ shinyServer(function(input, output) {
                             shapes = c("circle","circle"), borders = c("blue","red"))
     })
     
-    #Create scatter plot of population density vs. number of crimes
-    output$zipPlot3 <- renderPlot({
+    #Create plotly graph 
+    output$zipPlot3 <- renderPlotly({
         crimestat_population %>% 
-            filter(.,year %in% input$yearChoice_zip, month_full %in% input$monthChoice_zip) %>% 
-            group_by(.,zip, population_per_sqmile) %>% 
-            summarise(.,freq = sum(freq)) %>% 
+            filter(.,year %in% input$yearChoice_zip, month_full %in% input$monthChoice_zip) %>%
+            group_by(.,zip, population_per_sqmile) %>%
+            summarise(.,freq = sum(freq)) %>%
             ggplot() +
-            geom_point(aes(x = population_per_sqmile, y = freq, size = 1.2)) +
+            geom_point(aes(x = population_per_sqmile, y = freq/population_per_sqmile, name = zip)) + 
+            geom_smooth(aes(x = population_per_sqmile, y = freq/population_per_sqmile)) +
             scale_x_continuous(labels = comma) +
             scale_y_continuous(labels = comma) +
             ggtitle("Population Density vs. Crime Frequency") +
-            labs(x = "Population per Square Mile", y = "Number of Crimes") +
+            labs(x = "Population per Square Mile", y = "Number of Crimes per capita") +
             theme_light() +
-            theme(legend.position = "none")
+            theme(legend.position = "none",
+                  plot.title = element_text(size=18))
     })
     
     #Create horizontal bar plot for crime category
     output$categoryPlot1 <- renderPlot({
         crimestat %>%
-            filter(.,year %in% input$yearChoice_cat, month_full %in% input$monthChoice_cat) %>%
+            filter(.,year %in% input$yearChoice_cat, month_full %in% input$monthChoice_cat, zip %in% input$zipChoice_cat) %>%
             group_by(.,crime.cat) %>%
             summarise(.,freq = n()) %>%
             ggplot() +
@@ -95,13 +99,14 @@ shinyServer(function(input, output) {
                   panel.border = element_blank(),
                   panel.background = element_blank(),
                   axis.ticks.x = element_blank(),
-                  axis.ticks.y = element_blank())
+                  axis.ticks.y = element_blank(),
+                  plot.title = element_text(size=16))
     })
     
     #Create bar plot for crime category
     output$categoryPlot2 <- renderPlot({
         crimestat %>%
-            filter(.,year %in% input$yearChoice_cat, month_full %in% input$monthChoice_cat) %>%
+            filter(.,year %in% input$yearChoice_cat, month_full %in% input$monthChoice_cat, zip %in% input$zipChoice_cat) %>%
             group_by(.,day, crime.cat) %>%
             summarise(.,freq = n()) %>%
             ggplot() +
@@ -116,13 +121,14 @@ shinyServer(function(input, output) {
                   panel.border = element_blank(),
                   panel.background = element_blank(),
                   axis.ticks.x = element_blank(),
-                  axis.ticks.y = element_blank())
+                  axis.ticks.y = element_blank(),
+                  plot.title = element_text(size=18))
     })
     
     #Create line graph by crime category
     output$categoryPlot3 <- renderPlot({
         crimestat %>%
-            filter(.,year %in% input$yearChoice_cat, month_full %in% input$monthChoice_cat, time != "00:00") %>%
+            filter(.,year %in% input$yearChoice_cat, month_full %in% input$monthChoice_cat, zip %in% input$zipChoice_cat, time != "00:00") %>%
             group_by(.,hour, crime.cat) %>%
             summarise(.,freq = n()) %>%
             ggplot() +
@@ -132,13 +138,26 @@ shinyServer(function(input, output) {
             scale_y_continuous(labels = comma, expand = c(0,0)) +
             ggtitle("Number of Crimes by Hour and Category") +
             labs(x = "Hour (24 hour format)", y = "Number of Crimes") +
-            theme_light()
+            theme_light() +
+            theme(plot.title = element_text(size=18))
     })
-    
+
+    #Create sankey graph
+    output$premisePlot1 <- renderSankeyNetwork({
+        sankeyNetwork(Links = crimestat_links,
+                      Nodes = crimestat_nodes,
+                      Source = "IDsource",
+                      Target = "IDtarget",
+                      Value = "freq",
+                      NodeID = "name",
+                      fontSize = 10,
+                      height = 300)
+    })
+        
     #Create bar graph by day of week for different premise types
-    output$premisePlot1 <- renderPlot({
+    output$premisePlot2 <- renderPlot({
         crimestat %>%
-            filter(.,year %in% input$yearChoice_prem, month_full %in% input$monthChoice_prem) %>%
+            filter(.,year %in% input$yearChoice_prem, month_full %in% input$monthChoice_prem, zip %in% input$zipChoice_prem) %>%
             group_by(.,day, premise) %>%
             summarise(.,freq = n()) %>%
             ggplot() +
@@ -153,25 +172,14 @@ shinyServer(function(input, output) {
                   panel.border = element_blank(),
                   panel.background = element_blank(),
                   axis.ticks.x = element_blank(),
-                  axis.ticks.y = element_blank())
-    })
-    
-    #Create sankey graph
-    output$premisePlot2 <- renderSankeyNetwork({
-        sankeyNetwork(Links = crimestat_links,
-                      Nodes = crimestat_nodes,
-                      Source = "IDsource",
-                      Target = "IDtarget",
-                      Value = "freq",
-                      NodeID = "name",
-                      fontSize = 10,
-                      height = 300)
+                  axis.ticks.y = element_blank(),
+                  plot.title = element_text(size=18))
     })
     
     #Create line chart with different premise
     output$premisePlot3 <- renderPlot({
         crimestat %>%
-            filter(.,year %in% input$yearChoice_prem, month_full %in% input$monthChoice_prem, time != "00:00") %>%
+            filter(.,year %in% input$yearChoice_prem, month_full %in% input$monthChoice_prem, zip %in% input$zipChoice_prem, time != "00:00") %>%
             group_by(.,hour, premise) %>%
             summarise(.,freq = n()) %>%
             ggplot() +
@@ -181,47 +189,36 @@ shinyServer(function(input, output) {
             scale_y_continuous(labels = comma, expand = c(0,0)) +
             ggtitle("Number of Crimes by Hour and Premise") +
             labs(x = "Hour (24 hour format)", y = "Number of Crimes") +
-            theme_light()
-    })
-    
-    #Duration box plot by day
-    output$durationPlot1 <- renderPlot({
-        duration %>% 
-            select(., year, month_full, day, timediff_hrs) %>% 
-            filter(., year %in% input$yearChoice_duration, month_full %in% input$monthChoice_duration, timediff_hrs > 0) %>%  
-            ggplot() +
-            geom_boxplot(aes(x = day, y = timediff_hrs)) +
-            theme(
-                legend.position = "none"
-            ) +
-            ggtitle("Crime Duration by Day")
+            theme_light() +
+            theme(plot.title = element_text(size=18))
     })
     
     #Duration box plot by crime category
-    output$durationPlot2 <- renderPlot({
+    output$durationPlot1 <- renderPlot({
         duration %>% 
             select(., year, month_full, crime.cat, timediff_hrs) %>% 
-            filter(., year %in% input$yearChoice_duration, month_full %in% input$monthChoice_duration, timediff_hrs > 0) %>%  
+            filter(., year %in% input$yearChoice_duration, month_full %in% input$monthChoice_duration, crime.cat %in% input$timediff_cat, timediff_hrs > 0) %>%  
             ggplot() +
-            geom_boxplot(aes(x = crime.cat, y = timediff_hrs)) +
-            theme(
-                legend.position = "none",
-                axis.text.x = element_text(angle = 40, hjust = 1)
-            ) +
-            ggtitle("Crime Duration by Crime Category")
+            geom_histogram(aes(x = timediff_hrs)) +
+            scale_x_log10() +
+            theme(legend.position = "none",
+                  plot.title = element_text(size=18)) +
+            ggtitle("Crime Duration by Crime Category") +
+            labs(x = "Crime Duration by Hours", y = "Number of Crimes")
     })
     
     #Duration box plot by premise
-    output$durationPlot3 <- renderPlot({
+    output$durationPlot2 <- renderPlot({
         duration %>% 
             select(., year, month_full, premise, timediff_hrs) %>% 
-            filter(., year %in% input$yearChoice_duration, month_full %in% input$monthChoice_duration, timediff_hrs > 0) %>%  
+            filter(., year %in% input$yearChoice_duration, month_full %in% input$monthChoice_duration, premise %in% input$timediff_prem, timediff_hrs > 0) %>%  
             ggplot() +
-            geom_boxplot(aes(x = premise, y = timediff_hrs)) +
-            theme(
-                legend.position = "none"
-            ) +
-            ggtitle("Crime Duration by Crime Category")
+            geom_histogram(aes(x = timediff_hrs)) +
+            scale_x_log10() +
+            theme(legend.position = "none",
+                  plot.title = element_text(size=18)) +
+            ggtitle("Crime Duration by Premise") +
+            labs(x = "Crime Duration by Hours", y = "Number of Crimes")
     })
     
     #Moon phase bar chart
@@ -241,7 +238,8 @@ shinyServer(function(input, output) {
                   panel.border = element_blank(),
                   panel.background = element_blank(),
                   axis.ticks.x = element_blank(),
-                  axis.ticks.y = element_blank())
+                  axis.ticks.y = element_blank(),
+                  plot.title = element_text(size=18))
     })
     
     #Temperature vs. crime freq scatterplot
@@ -249,12 +247,14 @@ shinyServer(function(input, output) {
         crimestat_weather %>% 
             ggplot() +
             geom_point(aes(x = temperature, y = freq, size = 1.2)) +
+            geom_smooth(aes(x = temperature, y = freq), method = "lm") +
             scale_x_continuous(labels = comma) +
             scale_y_continuous(labels = comma) +
             ggtitle("Average Temperature by Year-Month vs. Crime Frequency") +
             labs(x = "Average Temperature by Year-Month", y = "Number of Crimes") +
             theme_light() +
-            theme(legend.position = "none")
+            theme(legend.position = "none",
+                  plot.title = element_text(size=18))
     })
     
     #unemployment vs. number of crimes line chart comparison
@@ -274,7 +274,9 @@ shinyServer(function(input, output) {
                 sec.axis = sec_axis(~./1000, name="Unemployment Rate (%)")
             ) +
             ggtitle("Number of Crimes vs. Unemployment Rate") +
-            theme_light()
+            theme_light() +
+            theme(legend.position = c(0.85,0.2),
+                  plot.title = element_text(size=18))
     })
     
     #Data tables
