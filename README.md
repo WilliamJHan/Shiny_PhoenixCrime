@@ -2,7 +2,7 @@
 Shiny_PhoenixCrime is a Shiny App by R showing crime frequency of Phoenix, AZ.
 
 ## About the Project
-This project is intended to provide more insights into frequencies of various crimes in Phoenix, AZ based on zip code, crime category, premisee type, etc. It will help the police to place the officers on duty more effectively (although there are many more factors to reduce serious crime in the city than from the data). Prospective home buyers will also be able to use this to get some insights on crime rate in the vacinity of properties of interest.
+This project is intended to provide more insights into frequencies of various crimes in Phoenix, AZ based on zip code, crime category, premise type, etc. It will help the police to place the officers on duty more effectively (although there are many more factors to reduce serious crime in the city than from the data). Prospective home buyers will also be able to use this to get some insights on crime rate in the vacinity of properties of interest.
 
 ## Sources
 Crime stat & police station data from: [City of Phoenix Open Data](https://www.phoenixopendata.com/dataset)
