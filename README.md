@@ -13,7 +13,7 @@ Moon phase calendar data from: [Vertex42](https://www.vertex42.com/calendars/moo
 
 Population by Zip code data from: [Zipatlas](http://zipatlas.com/us/az/phoenix/zip-code-comparison/population-density.htm)
 
-Weather data from: [National Weather SErvice Forecase Office](https://w2.weather.gov/climate/xmacis.php?wfo=psr)
+Weather data from: [National Weather Service Forecast Office](https://w2.weather.gov/climate/xmacis.php?wfo=psr)
 
 ## About the Author
 William Jeongwoo Han
